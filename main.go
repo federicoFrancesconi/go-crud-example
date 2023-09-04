@@ -11,6 +11,8 @@ func main() {
 	r.GET("/personas", handlers.ObtenerPersonas)
 	r.GET("/personas/:id", handlers.ObtenerPersonaPorId)
 	r.POST("/personas", handlers.CrearPersona)
+	r.PUT("/personas", handlers.ActualizarPersona)
+	r.DELETE("/personas/:id", handlers.EliminarPersona)
 
 	r.Run(":8080")
 }

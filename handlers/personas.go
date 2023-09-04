@@ -49,3 +49,40 @@ func CrearPersona(c *gin.Context) {
 	//retornar la respuesta
 	c.JSON(http.StatusCreated, persona)
 }
+
+func ActualizarPersona(c *gin.Context) {
+	//obtener y validar parametros
+	var personaActualizada dto.Persona
+
+	if err := c.ShouldBindJSON(&personaActualizada); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := services.ActualizarPersona(personaActualizada)
+
+	if err != "" {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Persona not found"})
+		return
+	}
+
+	c.JSON(http.StatusTeapot, personaActualizada)
+}
+
+func EliminarPersona(c *gin.Context) {
+	input := c.Param("id")
+
+	id, err := strconv.Atoi(input)
+
+	if (err != nil) {
+		c.JSON(http.StatusBadRequest, gin.H{"error" : "Ingreso un id que no es numero entero"})
+	}
+
+	resultado := services.EliminarPersona(id)
+
+	if (resultado != "") {
+		c.JSON(http.StatusBadRequest, gin.H{"error" :"ID invalido"})
+	} else {
+		c.JSON(http.StatusAccepted, "correcto")
+	}
+}
